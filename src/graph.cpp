@@ -1,5 +1,9 @@
 #include "graph.h"
-#include "pbbslib/sample_sort.h"
+#include <parlay/parallel.h>
+#include <parlay/primitives.h>
+#include <parlay/sequence.h>
+#include <parlay/random.h>
+// #include "pbbslib/sample_sort.h"
 #include <fstream>
 graph::graph(
 		const char *fw_beg_file,
@@ -121,10 +125,10 @@ graph::graph(const char* filename) {
   fw_beg_pos = new index_t[vert_count+1];
   fw_csr = new vertex_t[edge_count];
 
-  parallel_for(0, n+1, [&](size_t i) {
+  parlay::parallel_for(0, n+1, [&](size_t i) {
     fw_beg_pos[i] = fw_beg_tmp[i];
   });
-  parallel_for(0, m, [&](size_t i) {
+  parlay::parallel_for(0, m, [&](size_t i) {
     fw_csr[i] = fw_csr_tmp[i];
   });
   delete[] fw_beg_tmp;
@@ -139,24 +143,26 @@ graph::graph(const char* filename) {
   // backward
   bw_beg_pos = new index_t[vert_count+1];
   bw_csr = new vertex_t[edge_count];
-  pbbs::sequence<std::pair<vertex_t, vertex_t>> edge_list(edge_count);
+  parlay::sequence<std::pair<vertex_t, vertex_t>> edge_list(edge_count);
   
-  parallel_for(0, vert_count, [&](size_t i) {
-    parallel_for(fw_beg_pos[i], fw_beg_pos[i+1], [&](size_t j) {
+  parlay::parallel_for(0, vert_count, [&](size_t i) {
+    parlay::parallel_for(fw_beg_pos[i], fw_beg_pos[i+1], [&](size_t j) {
       edge_list[j] = {fw_csr[j], i};
     });
   });
   //std::cout << "Graph copied\n";
 
-  sample_sort_inplace(edge_list.slice(), [&](std::pair<vertex_t, vertex_t> a, std::pair<vertex_t, vertex_t> b) {
-    return a < b;
-  });
+  // sample_sort_inplace(edge_list.slice(), [&](std::pair<vertex_t, vertex_t> a, std::pair<vertex_t, vertex_t> b) {
+  //   return a < b;
+  // });
+  parlay::integer_sort_inplace(edge_list,
+																	[&](const std::pair<unsigned, unsigned>& p) { return p.first; });
   //std::cout << "Graph sorted\n";
 
-  parallel_for(0, edge_list[0].first, [&](size_t i) {
+  parlay::parallel_for(0, edge_list[0].first, [&](size_t i) {
     bw_beg_pos[i] = 0;
   });
-  parallel_for(0, edge_count, [&](size_t i) {
+  parlay::parallel_for(0, edge_count, [&](size_t i) {
     vertex_t u = edge_list[i].first;
     vertex_t v = edge_list[i].second;
     bw_csr[i] = v;
@@ -165,16 +171,16 @@ graph::graph(const char* filename) {
     }
     if(i == edge_count-1 || (edge_list[i+1].first != u)) {
       vertex_t end = (i==edge_count-1?vert_count+1:edge_list[i+1].first);
-      parallel_for(u+1, end, [&](size_t j) {
+      parlay::parallel_for(u+1, end, [&](size_t j) {
         bw_beg_pos[j] = i+1;
       });
     }
   });
-  parallel_for(0, n+1, [&](size_t i) {
+  parlay::parallel_for(0, n+1, [&](size_t i) {
     assert(i == n || bw_beg_pos[i] <= bw_beg_pos[i+1]);
     assert(bw_beg_pos[i] <= m);
   });
-  parallel_for(0, m, [&](size_t i) {
+  parlay::parallel_for(0, m, [&](size_t i) {
     assert(bw_csr[i] >= 0 && bw_csr[i] < n);
   });
   //std::cout << "Backward edges generated, " << wtime()-tm << " second(s)\n";

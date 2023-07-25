@@ -4,6 +4,7 @@ cc = "$(shell which g++)"
 #flags = -I. -fopenmp -march=athlon64 -O3
 flags = -I. -fopenmp -O3 -fcilkplus -DCILK -march=native
 #flags += -std=c++11
+INCLUDE_PATH = -I../../../parlaylib/include/
 
 ifeq ($(debug), 1)
 	flags+= -DDEBUG 
@@ -21,7 +22,7 @@ deps = $(wildcard ../../lib/*.h) \
 	$(cc) -c $< -o $@ $(flags)
 
 $(exe):$(objs)
-	$(cc) $(objs) -o $(exe) $(flags)
+	$(cc) $(objs) -o $(exe) $(flags) $(INCLUDE_PATH)
 
 
 test:$(exe)
