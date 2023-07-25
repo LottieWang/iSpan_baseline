@@ -31,7 +31,8 @@ void scc_detection(
         const int gamma,
         const double theta,
         const index_t thread_count,
-        double *avg_time
+        double *avg_time,
+        bool output
         )
 {
     const index_t vert_count = g->vert_count;
@@ -471,7 +472,6 @@ void scc_detection(
         #pragma omp barrier
         time_fw = wtime() - time;
 
-        
         time = wtime();
         bw_gfq_from_fw(fw_sa, 
                 thread_count,
@@ -1063,7 +1063,7 @@ void scc_detection(
         {
             if(tid == 0)
             {
-                printf("\ntime size_1_first, %.3lf\ntime size_1, %.3lf\ntime pivot, %.3lf\nlargest fw, %.3lf\nlargest bw, %.3lf\nlargest fw/bw, %.3lf\ntrim size_2, %.3lf\ntrim size_3, %.3lf\nwcc time, %.3lf\nmice fw-bw time, %.3lf\nmice scc time, %.3lf\ntotal time, %.3lf\n", time_size_1_first * 1000, time_size_1 * 1000, pivot_time * 1000, time_fw * 1000, time_bw * 1000, (pivot_time + time_fw + time_bw) * 1000, time_size_2 * 1000, time_size_3 * 1000, time_wcc * 1000, time_mice_fw_bw * 1000, (time_wcc + time_mice_fw_bw) * 1000, (time_size_1_first + time_size_1 + pivot_time + time_fw + time_bw + time_size_2 + time_size_3 + time_wcc + time_mice_fw_bw) * 1000);
+                //printf("\ntime size_1_first, %.3lf\ntime size_1, %.3lf\ntime pivot, %.3lf\nlargest fw, %.3lf\nlargest bw, %.3lf\nlargest fw/bw, %.3lf\ntrim size_2, %.3lf\ntrim size_3, %.3lf\nwcc time, %.3lf\nmice fw-bw time, %.3lf\nmice scc time, %.3lf\ntotal time, %.3lf\n", time_size_1_first * 1000, time_size_1 * 1000, pivot_time * 1000, time_fw * 1000, time_bw * 1000, (pivot_time + time_fw + time_bw) * 1000, time_size_2 * 1000, time_size_3 * 1000, time_wcc * 1000, time_mice_fw_bw * 1000, (time_wcc + time_mice_fw_bw) * 1000, (time_size_1_first + time_size_1 + pivot_time + time_fw + time_bw + time_size_2 + time_size_3 + time_wcc + time_mice_fw_bw) * 1000);
             }
         }
         #pragma omp barrier
@@ -1073,8 +1073,10 @@ void scc_detection(
     if(DEBUG)
         printf("total time, %.3lf\n", end_time * 1000);
 
-    get_scc_result(scc_id,
-            vert_count);
+    if(output) {
+      get_scc_result(scc_id,
+              vert_count);
+    }
 
     delete[] scc_id;
     delete[] color;

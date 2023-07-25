@@ -59,7 +59,7 @@ int main(int argc, char** argv){
 	size_t edge_count=0;
 	size_t vert_count;
 	vertex_t v_max = 0;
-	vertex_t v_min = 999999;//as infinity
+	vertex_t v_min = 2e9;//as infinity
 	vertex_t a;
 	while(next<file_size){
 		char* sss=ss+curr;

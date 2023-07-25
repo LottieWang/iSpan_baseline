@@ -2,7 +2,7 @@ exe = ispan
 
 cc = "$(shell which g++)" 
 #flags = -I. -fopenmp -march=athlon64 -O3
-flags = -I. -fopenmp -O3
+flags = -I. -fopenmp -O3 -fcilkplus -DCILK -march=native
 #flags += -std=c++11
 
 ifeq ($(debug), 1)

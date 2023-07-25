@@ -26,6 +26,7 @@ class graph
 				const char *fw_csr_file,
                 const char *bw_beg_file,
                 const char *bw_csr_file);
+    graph(const char *filename);
 		void gen_src(){};
 		void groupby(){};
 };

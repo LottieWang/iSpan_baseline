@@ -21,6 +21,11 @@ graph *graph_load(
     return g;
 }
 
+graph* load_binary(const char* filename) {
+  graph *g = new graph(filename);
+  return g;
+}
+
 void get_scc_result(
         index_t *scc_id,
         index_t vert_count
@@ -56,6 +61,7 @@ void get_scc_result(
                         }
     }
     printf("\nResult:\nlargest, %d\ntrimmed size_1, %d\ntrimmed size_2, %d\ntrimmed size_3, %d\nothers, %d\ntotal, %d\n", largest, size_1, size_2/2, size_3_type_1/3 +size_3_type_2/3, mp.size(), (1 + size_1 + size_2/2 + size_3_type_1/3 + size_3_type_2/3 + mp.size()));
+    //printf("%d\n", (1 + size_1 + size_2/2 + size_3_type_1/3 + size_3_type_2/3 + mp.size()));
 
 }
 
@@ -68,25 +74,25 @@ void print_time_result(
     //4 trim_size_1, 5 trim_size_2, 6 pivot_selection, 7 fw_bfs, 8 bw_bfs, 9 color propagation, 10 color identify, 11 color_init
     if(run_times > 0)
     {
-        for(index_t i=0; i<15; ++i)
-            avg_time[i] = (avg_time[i] / run_times) * 1000;
-        printf("\nAverage Time Consumption for Running %d Times (ms)\n", run_times);
-        printf("Trim, %.3lf\n", avg_time[0]);
-        printf("Elephant SCC, %.3lf\n", avg_time[1]);
-//        printf("WCC, %.3lf\n", avg_time[12]);
-        printf("Mice SCC, %.3lf\n", avg_time[2]);
-        printf("Total time, %.3lf\n", avg_time[3]);
+        //for(index_t i=0; i<15; ++i)
+            //avg_time[i] = (avg_time[i] / run_times) * 1000;
+        //printf("\nAverage Time Consumption for Running %d Times (ms)\n", run_times);
+        //printf("Trim, %.3lf\n", avg_time[0]);
+        //printf("Elephant SCC, %.3lf\n", avg_time[1]);
+////        printf("WCC, %.3lf\n", avg_time[12]);
+        //printf("Mice SCC, %.3lf\n", avg_time[2]);
+        //printf("Total time, %.3lf\n", avg_time[3]);
 
-        printf("\n------Details------\n");
-        printf("Trim size_1, %.3lf\n", avg_time[4]);
-        printf("Pivot selection, %.3lf\n", avg_time[6]);
-        printf("FW BFS, %.3lf\n", avg_time[7]);
-        printf("BW BFS, %.3lf\n", avg_time[8]);
-        printf("Trim size_2, %.3lf\n", avg_time[5]);
-        printf("Trim size_3, %.3lf\n", avg_time[13]);
-//        printf("GFQ, %.3lf\n", avg_time[14]);
-        printf("Wcc, %.3lf\n", avg_time[9]);
-        printf("Mice fw-bw, %.3lf\n", avg_time[10]);
+        //printf("\n------Details------\n");
+        //printf("Trim size_1, %.3lf\n", avg_time[4]);
+        //printf("Pivot selection, %.3lf\n", avg_time[6]);
+        //printf("FW BFS, %.3lf\n", avg_time[7]);
+        //printf("BW BFS, %.3lf\n", avg_time[8]);
+        //printf("Trim size_2, %.3lf\n", avg_time[5]);
+        //printf("Trim size_3, %.3lf\n", avg_time[13]);
+////        printf("GFQ, %.3lf\n", avg_time[14]);
+        //printf("Wcc, %.3lf\n", avg_time[9]);
+        //printf("Mice fw-bw, %.3lf\n", avg_time[10]);
        // printf("Color init, %.3lf\n", avg_time[11]);
     }
 }

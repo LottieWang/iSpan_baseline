@@ -12,6 +12,8 @@ graph *graph_load(
         double *avg_time
         );
 
+graph *load_binary(const char *filename);
+
 void scc_detection(
         const graph *g,
         const int alpha,
@@ -19,7 +21,8 @@ void scc_detection(
         const int gamma,
         const double theta,
         const index_t thread_count,
-        double *avg_time
+        double *avg_time,
+        bool output
         );
 
 void get_scc_result(
