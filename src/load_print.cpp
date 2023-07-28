@@ -60,7 +60,7 @@ void get_scc_result(
                             mp[scc_id[i]] ++;
                         }
     }
-    printf("\nResult:\nlargest, %d\ntrimmed size_1, %d\ntrimmed size_2, %d\ntrimmed size_3, %d\nothers, %d\ntotal, %d\n", largest, size_1, size_2/2, size_3_type_1/3 +size_3_type_2/3, mp.size(), (1 + size_1 + size_2/2 + size_3_type_1/3 + size_3_type_2/3 + mp.size()));
+    printf("Result:\nlargest, %d\ntrimmed size_1, %d\ntrimmed size_2, %d\ntrimmed size_3, %d\nothers, %d\ntotal, %d\n", largest, size_1, size_2/2, size_3_type_1/3 +size_3_type_2/3, mp.size(), (1 + size_1 + size_2/2 + size_3_type_1/3 + size_3_type_2/3 + mp.size()));
     //printf("%d\n", (1 + size_1 + size_2/2 + size_3_type_1/3 + size_3_type_2/3 + mp.size()));
 
 }

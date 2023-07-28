@@ -40,7 +40,7 @@ int main(int args, char **argv)
                     //bw_csr_file,
                     //avg_time);
     index_t i=0;
-
+    printf("Graph: %s n: %ld m: %ld\n", filename, g->vert_count, g->edge_count);
     ///step 2: detect scc
     double temp_time = timer();
     scc_detection(g, alpha, beta, gamma, theta, thread_count, avg_time, true);
@@ -59,7 +59,7 @@ int main(int args, char **argv)
     //   t.stop();
     //   printf("%f\n", t.get_total());
     }
-    printf("average time: %f\n", total_time/run_times);
+    printf("average cost: %f\n", total_time/run_times);
 //    printf("ready?\n");
     ///step 3: print result
     // print_time_result(run_times,
