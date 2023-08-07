@@ -19,7 +19,7 @@ deps = $(wildcard ../../lib/*.h) \
 				Makefile
 
 %.o:%.cpp $(deps)
-	$(cc) -c $< -o $@ $(flags)
+	$(cc) -c $< -o $@ $(flags) $(INCLUDE_PATH)
 
 $(exe):$(objs)
 	$(cc) $(objs) -o $(exe) $(flags) $(INCLUDE_PATH)
