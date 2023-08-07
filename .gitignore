@@ -1,0 +1,7 @@
+src/*
+!src/Makefile
+!src/*.h
+!src/*.hpp
+!src/*.cpp
+!src/*.sh
+
